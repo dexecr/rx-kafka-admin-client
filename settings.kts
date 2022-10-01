@@ -1,0 +1,1 @@
+rootProject.name="rx-kafka-admin-client"

@@ -4,6 +4,9 @@ import org.apache.kafka.common.KafkaFuture
 import javax.lang.model.element.Modifier
 import java.lang.reflect.*
 
+version = "0.0.1-SNAPSHOT"
+group = "com.dexecr"
+
 buildscript {
     repositories {
         mavenCentral()
@@ -17,16 +20,18 @@ buildscript {
 
 plugins {
     id("java-library")
+    id("maven-publish")
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
+        vendor.set(JvmVendorSpec.ADOPTOPENJDK)
+    }
 }
 
 java.sourceSets["main"].java {
     srcDir("${buildDir}/generated/sources/client")
-}
-
-
-configure<JavaPluginExtension> {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
 }
 
 repositories {
@@ -34,20 +39,52 @@ repositories {
 }
 
 dependencies {
-    "implementation"("org.apache.kafka:kafka-clients:${project.properties["kafkaClientVersion"]}")
-    "implementation"("io.projectreactor:reactor-core:${project.properties["reactorVersion"]}")
-
-}
-
-tasks.register<Copy>("copyLibs") {
-    from("configurations.runtimeClasspath")
-    into ("$buildDir/libs")
+    "api"("org.apache.kafka:kafka-clients:${project.properties["kafkaClientVersion"]}")
+    "api"("io.projectreactor:reactor-core:${project.properties["reactorVersion"]}")
 }
 
 tasks.register<GenerateRxKafkaClientTask>("codeGen")
 
-tasks.named("compileJava") {
+tasks.withType<JavaCompile>  {
     dependsOn("codeGen")
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+            pom {
+                name.set("RxKafkaAdminClient")
+                description.set("KafkaAdminClient for reactor")
+                url.set("https://github.com/dexecr/rx-kafka-admin-client/")
+                licenses {
+                    license {
+                        name.set("The Apache License, Version 2.0")
+                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("dexecr")
+                        name.set("dexecr")
+                        email.set("dexecrd@gmail.com")
+                    }
+                }
+                scm {
+                    connection.set("scm:git:git://github.com/dexecr/rx-kafka-admin-client.git")
+                    developerConnection.set("scm:git:ssh://git@github.com/dexecr/rx-kafka-admin-client.git")
+                    url.set("https://github.com/dexecr/rx-kafka-admin-client")
+                }
+            }
+        }
+    }
+}
+
+tasks.withType<Jar> {
+    into("META-INF/maven/${project.group}/${project.name}") {
+        from(tasks.getByName("generatePomFileForMavenJavaPublication"))
+        rename(".*", "pom.xml")
+    }
 }
 
 abstract class GenerateRxKafkaClientTask : DefaultTask() {

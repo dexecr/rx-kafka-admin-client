@@ -1,11 +1,18 @@
 RxKafkaAdminClient
 ========
 
-`RxKafkaAdminClient` is a proxy for KafkaAdminClient that transforms results for all methods from `KafkaFuture<T>` to `Mono<T>`
+`RxKafkaAdminClient` - reactive wrapper for KafkaAdminClient that's based on Reactor framework. Under the cover method's results are transformed from `KafkaFuture<T>` to `Mono<T>`
 
 `RxKafkaAdminClient` is based on generated code without using java reflection api
 
-### Examples
+Java version
+------------
+
+`RxKafkaAdminClient` requires Java 8 or + to run
+
+
+Examples
+--------
 
 #### Create, describe and delete topic operations using native KafkaAdminClient and RxKafkaAdminClient
 
@@ -78,11 +85,5 @@ Flux.concat(client.createTopics(List.of(new NewTopic("test", 5, (short) 1))).val
     //close client
     .doOnSuccess(result -> { System.out.println("Close RxAdmin..."); client.close(); })
     .block();
-```
-
-### Build lib
-
-```
-./gradlew build
 ```
 
