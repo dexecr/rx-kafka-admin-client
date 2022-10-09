@@ -1,7 +1,8 @@
-package com.dexecr.kafka.clients.admin.rx;
+package com.dexecr.kafka.clients.rx.admin;
 
-import com.dexecr.kafka.clients.admin.rx.internal.RxKafkaAdminClient;
+import com.dexecr.kafka.clients.rx.admin.internal.RxKafkaAdminClient;
 
+import java.time.Duration;
 import java.util.Map;
 
 public interface RxAdmin extends RxAdminOperations, AutoCloseable {
@@ -17,4 +18,6 @@ public interface RxAdmin extends RxAdminOperations, AutoCloseable {
     }
 
     void close();
+
+    void close(Duration timeout);
 }

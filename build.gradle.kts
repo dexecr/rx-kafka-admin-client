@@ -54,9 +54,9 @@ publishing {
         create<MavenPublication>("mavenJava") {
             from(components["java"])
             pom {
-                name.set("RxKafkaAdminClient")
-                description.set("KafkaAdminClient for reactor")
-                url.set("https://github.com/dexecr/rx-kafka-admin-client/")
+                name.set("Reactive kafka clients")
+                description.set("KafkaClients for reactor")
+                url.set("https://github.com/dexecr/rx-kafka-clients/")
                 licenses {
                     license {
                         name.set("The Apache License, Version 2.0")
@@ -71,9 +71,9 @@ publishing {
                     }
                 }
                 scm {
-                    connection.set("scm:git:git://github.com/dexecr/rx-kafka-admin-client.git")
-                    developerConnection.set("scm:git:ssh://git@github.com/dexecr/rx-kafka-admin-client.git")
-                    url.set("https://github.com/dexecr/rx-kafka-admin-client")
+                    connection.set("scm:git:git://github.com/dexecr/rx-kafka-clients.git")
+                    developerConnection.set("scm:git:ssh://git@github.com/dexecr/rx-kafka-clients.git")
+                    url.set("https://github.com/dexecr/rx-kafka-clients")
                 }
             }
         }
@@ -97,14 +97,19 @@ abstract class GenerateRxKafkaClientTask : DefaultTask() {
             "RxAdminAclOperations" to setOf("describeAcls", "createAcls", "deleteAcls"),
             "RxAdminConfigOperations" to setOf("describeConfigs", "alterConfigs", "incrementalAlterConfigs"),
             "RxAdminLogDirsOperations" to setOf("alterReplicaLogDirs", "describeLogDirs", "describeReplicaLogDirs"),
-            "RxAdminDelegationTokenOperations" to setOf("createDelegationToken", "renewDelegationToken", "expireDelegationToken", "describeDelegationToken"),
+            "RxAdminDelegationTokenOperations" to setOf(
+                "createDelegationToken", "renewDelegationToken", "expireDelegationToken", "describeDelegationToken"
+            ),
             "RxAdminConsumerGroupOperations" to setOf(
                 "describeConsumerGroups", "listConsumerGroups", "listConsumerGroupOffsets", "deleteConsumerGroups",
                 "deleteConsumerGroupOffsets", "alterConsumerGroupOffsets", "removeMembersFromConsumerGroup"
             ),
-            "RxAdminPartitionOperations" to setOf("electLeaders", "alterPartitionReassignments", "listPartitionReassignments", "listOffsets"),
+            "RxAdminPartitionOperations" to setOf(
+                "electLeaders", "alterPartitionReassignments", "listPartitionReassignments", "listOffsets",
+                "createPartitions"
+            ),
         )
-        private const val PACKAGE_NAME = "com.dexecr.kafka.clients.admin.rx"
+        private const val PACKAGE_NAME = "com.dexecr.kafka.clients.rx.admin"
         private val RX_ADMIN_CLIENT_CLS: ClassName = ClassName.get(PACKAGE_NAME, "RxAdmin")
         private val KAFKA_RX_UTILS_CLS: ClassName = ClassName.get(PACKAGE_NAME, "KafkaRxUtils")
         private val MONO_CLS: ClassName = ClassName.get("reactor.core.publisher", "Mono")

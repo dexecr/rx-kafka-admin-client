@@ -1,4 +1,4 @@
-package com.dexecr.kafka.clients.admin.rx;
+package com.dexecr.kafka.clients.rx.admin;
 
 import org.apache.kafka.common.KafkaFuture;
 import reactor.core.publisher.Mono;

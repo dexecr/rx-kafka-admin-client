@@ -1,1 +1,1 @@
-rootProject.name="rx-kafka-admin-client"
+rootProject.name="rx-kafka-clients"

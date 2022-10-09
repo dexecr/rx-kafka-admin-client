@@ -1,8 +1,9 @@
-package com.dexecr.kafka.clients.admin.rx.internal;
+package com.dexecr.kafka.clients.rx.admin.internal;
 
-import com.dexecr.kafka.clients.admin.rx.RxAdmin;
+import com.dexecr.kafka.clients.rx.admin.RxAdmin;
 import org.apache.kafka.clients.admin.Admin;
 
+import java.time.Duration;
 import java.util.Map;
 
 public class RxKafkaAdminClient extends GenericRxAdminOperations implements RxAdmin {
@@ -14,5 +15,10 @@ public class RxKafkaAdminClient extends GenericRxAdminOperations implements RxAd
     @Override
     public void close() {
         admin.close();
+    }
+
+    @Override
+    public void close(Duration timeout) {
+        admin.close(timeout);
     }
 }
