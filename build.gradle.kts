@@ -4,7 +4,7 @@ import org.apache.kafka.common.KafkaFuture
 import javax.lang.model.element.Modifier
 import java.lang.reflect.*
 
-version = "0.0.1"
+version = "0.0.2-SNAPSHOT"
 group = "com.dexecr"
 
 buildscript {
