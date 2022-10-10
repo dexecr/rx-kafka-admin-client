@@ -21,6 +21,7 @@ buildscript {
 plugins {
     id("java-library")
     id("maven-publish")
+    signing
 }
 
 java {
@@ -28,6 +29,8 @@ java {
         languageVersion.set(JavaLanguageVersion.of(8))
         vendor.set(JvmVendorSpec.ADOPTOPENJDK)
     }
+    withJavadocJar()
+    withSourcesJar()
 }
 
 java.sourceSets["main"].java {
@@ -50,6 +53,17 @@ tasks.withType<JavaCompile>  {
 }
 
 publishing {
+    repositories {
+        maven {
+            val snapshotUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots"
+            val releaseUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2"
+            credentials {
+                username = "${project.properties["ossrhUsername"]}"
+                password = "${project.properties["ossrhPassword"]}"
+            }
+            url = uri(if (version.toString().endsWith("SNAPSHOT")) snapshotUrl else releaseUrl)
+        }
+    }
     publications {
         create<MavenPublication>("mavenJava") {
             from(components["java"])
@@ -78,6 +92,10 @@ publishing {
             }
         }
     }
+}
+
+signing {
+    sign(publishing.publications["mavenJava"])
 }
 
 tasks.withType<Jar> {
